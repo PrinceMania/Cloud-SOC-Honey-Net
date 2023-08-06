@@ -37,14 +37,12 @@ To assess the effectiveness of the implemented security measures, I initially me
 ![Un-Secured Network](https://github.com/PrinceMania/Cloud-SOC-Honey-Net/assets/141386970/25c763db-2d66-4c1b-b0ae-4a7f25e78d96)
 
 
-
 <b>Before Hardening Measures and Security Controls:</b>
 
 - In the "BEFORE" stage of the project, all resources were initially deployed with public exposure to the internet. This setup was intentionally insecure to attract potential cyber attackers and observe their tactics. The Virtual Machines had both their Network Security Groups (NSGs) and built-in firewalls wide open, allowing unrestricted access from any source. Additionally, all other resources, such as storage accounts and databases, were deployed with public endpoints visible to the internet, without utilizing any Private Endpoints for added security.
 
 ## Architecture After Implementing Hardening Measures and Security Controls
 ![Secured Network](https://github.com/PrinceMania/Cloud-SOC-Honey-Net/assets/141386970/122baadd-c443-4fb9-b589-2047320390f1)
-
 
 
  <b>For the "AFTER" stage, I implemented a series of hardening measures and security controls to improve the environment's overall security posture. These improvements included:</b>
@@ -110,7 +108,6 @@ Stop Time	2023-07-30 03:22:15
 | SecurityIncident (Sentinel Incidents)         | 0
 | NSG Inbound Malicious Flows Allowed | 0
 
-<br />
 
 ## Utilizing NIST 800.61r2 Computer Incident Handling Guide
 
@@ -147,7 +144,6 @@ Each organization will have policies related to an incident response that should
 - Corrective actions are implemented to remediate the root cause.
 - And a lessons-learned review of the incident was conducted.
 
-<br />
 
 ## Conclusion
 
