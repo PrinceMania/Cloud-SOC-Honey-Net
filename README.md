@@ -1,5 +1,6 @@
 # Building a SOC + Honeynet in Azure (Live Traffic)
-![Full Project Map](https://github.com/PrinceMania/Cloud-SOC-Honey-Net/assets/141386970/f75de645-2077-4ce3-82d6-1c421a399d48)
+![Full Project Map v2](https://github.com/PrinceMania/Cloud-SOC-Honey-Net/assets/141386970/e7606f92-1138-4726-a50a-1e1c2dcb4888)
+
 
 
 ## Introduction
@@ -15,37 +16,60 @@ To assess the effectiveness of the implemented security measures, I initially me
 - SecurityIncident (Incidents created by Sentinel)
 - AzureNetworkAnalytics_CL (Malicious Flows allowed into our honeynet)
 
-## Microsoft Sentinel / Workbook
-![(After)Microsoft-Workbook](https://github.com/PrinceMania/Cloud-SOC-Honey-Net/assets/141386970/ac488317-1f44-4d20-9c96-c1bb242fc175)
+## Technologies, Regulations, and Azure Components Employed:
 
-## Architecture Before Hardening / Security Controls
+- Azure Virtual Network (VNet)
+- Azure Network Security Group (NSG)
+- Virtual Machines (2x Windows, 1x Linux)
+- Log Analytics Workspace with Kusto Query Language (KQL) Queries
+- Azure Key Vault for Secure Secrets Management
+- Azure Storage Account for Data Storage
+- Microsoft Sentinel for Security Information and Event Management (SIEM)
+- Microsoft Defender for Cloud to Protect Cloud Resources
+- Windows Remote Desktop for Remote Access
+- Command Line Interface (CLI) for System Management
+- PowerShell for Automation and Configuration Management
+- [NIST SP 800-53 Revision 5](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final) for Security Controls
+- [NIST SP 800-61 Revision 2](https://www.nist.gov/privacy-framework/nist-sp-800-61) for Incident Handling Guidance
+
+
+## Architecture Prior to Implementing Hardening Measures and Security Controls
 ![Architecture Diagram](https://i.imgur.com/aBDwnKb.jpg)
 
-## Architecture After Hardening / Security Controls
+<b>Before Hardening Measures and Security Controls:</b>
+
+- In the "BEFORE" stage of the project, all resources were initially deployed with public exposure to the internet. This setup was intentionally insecure to attract potential cyber attackers and observe their tactics. The Virtual Machines had both their Network Security Groups (NSGs) and built-in firewalls wide open, allowing unrestricted access from any source. Additionally, all other resources, such as storage accounts and databases, were deployed with public endpoints visible to the internet, without utilizing any Private Endpoints for added security.
+
+## Architecture After Implementing Hardening Measures and Security Controls
 ![Architecture Diagram](https://i.imgur.com/YQNa9Pp.jpg)
 
-The architecture of the mini honeynet in Azure consists of the following components:
+ <b>For the "AFTER" stage, I implemented a series of hardening measures and security controls to improve the environment's overall security posture. These improvements included:</b>
 
-- Virtual Network (VNet)
-- Network Security Group (NSG)
-- Virtual Machines (2 windows, 1 linux)
-- Log Analytics Workspace
-- Azure Key Vault
-- Azure Storage Account
-- Microsoft Sentinel
+- <b>Network Security Groups (NSGs)</b>: I hardened the NSGs by blocking all inbound and outbound traffic, with the sole exception of my own public IP address. This ensured that only authorized traffic from a trusted source was allowed to access the virtual machines.
 
-In the "BEFORE" phase, all resources were initially deployed and exposed to the internet. The Virtual Machines had both their Network Security Groups and built-in firewalls set to allow all traffic, leaving them wide open to potential threats. Additionally, all other resources were deployed with public endpoints accessible from the Internet, without utilizing Private Endpoints.
+- <b>Built-in Firewalls</b>: I configured the built-in firewalls on the virtual machines to restrict access and protect the resources from unauthorized connections. This step involved fine-tuning the firewall rules based on the specific requirements of each VM, thereby minimizing the potential attack surface.
 
-In the "AFTER" phase, significant security improvements were made. The Network Security Groups were hardened by blocking ALL traffic, except for connections originating from my admin workstation. Furthermore, all other resources were strengthened with their built-in firewalls and additionally protected using Private Endpoints, limiting their exposure to the Internet.
+- <b>Private Endpoints</b>: To enhance the security of other Azure resources, I replaced the public endpoints with Private Endpoints. This ensured that access to sensitive resources, such as storage accounts and databases, was limited to the virtual network and not exposed to the public internet. As a result, these resources were protected from unauthorized access and potential attacks.
 
-These security enhancements aimed to create a more robust and secure environment, and the "BEFORE" and "AFTER" metrics will reflect the impact of these measures on the overall security posture.
-
+By comparing the security metrics BEFORE and AFTER implementing these hardening measures and security controls, I was able to demonstrate the effectiveness of each step in improving the overall security posture of the Azure cloud environment.
 
 ## Attack Maps Before Hardening / Security Controls
+
+
+- <b>This attack map demonstrates the consequences of leaving the Network Security Group (NSG) open, as it allowed for malicious traffic to flow unimpeded. This visualization underscores the importance of implementing proper security measures, such as restricting NSG rules, to prevent unauthorized access and minimize potential threats.</b>
+
+
 ![(Before)-nsg-malicious-allowed-in](https://github.com/PrinceMania/Cloud-SOC-Honey-Net/assets/141386970/44ac18d1-1bc0-4c14-b119-edf75a6ca6e8)
 <br>
 
+ - <b>This attack map highlights the numerous syslog authentication failures experienced by the Linux server I deployed, indicating that unauthorized access attempts were made from outisde. This serves as a reminder of the importance of securing Linux servers with strong authentication mechanisms and monitoring system logs for signs of intrusion attempts.</b>
+
+
 ![(Before)-syslog-ssh-auth-fail](https://github.com/PrinceMania/Cloud-SOC-Honey-Net/assets/141386970/6796531a-63b2-4156-98e2-1168523f2335)
+
+
+ - <b>This attack map showcases numerous RDP and SMB failures, illustrating the persistent attempts by potential attackers to exploit these protocols. The visualization emphasizes the need for securing remote access and file sharing services to protect against unauthorized access and potential cyber threats.</b>
+
 
 ![(Before)-windows-rdp-smb-auth-fail](https://github.com/PrinceMania/Cloud-SOC-Honey-Net/assets/141386970/d412e69a-e6d4-4774-8157-f9b50c116fe5)
 
@@ -58,11 +82,11 @@ Stop Time 2023-07-29 09:46:39
 
 | Metric                   | Count
 | ------------------------ | -----
-| SecurityEvent            | 75961
-| Syslog                   | 4913
-| SecurityAlert            | 14
-| SecurityIncident         | 122
-| AzureNetworkAnalytics_CL | 2949
+|SecurityEvent (Windows VM)           | 75961
+| Syslog (Linux VM)                 | 4913
+| SecurityAlert (Microsoft Defender for Cloud)           | 14
+| SecurityIncident (Sentinel Incidents)          | 122
+| NSG Inbound Malicious Flows Allowed | 2949
 
 ## Attack Maps Before Hardening / Security Controls
 
@@ -76,11 +100,11 @@ Stop Time	2023-07-30 03:22:15
 
 | Metric                   | Count
 | ------------------------ | -----
-| SecurityEvent            | 6265
-| Syslog                   | 0
-| SecurityAlert            | 0
-| SecurityIncident         | 0
-| AzureNetworkAnalytics_CL | 0
+| SecurityEvent (Windows VM)             | 6265
+| Syslog (Linux VM)                    | 11
+| SecurityAlert (Microsoft Defender for Cloud)            | 0
+| SecurityIncident (Sentinel Incidents)         | 0
+| NSG Inbound Malicious Flows Allowed | 0
 
 ## Conclusion
 
