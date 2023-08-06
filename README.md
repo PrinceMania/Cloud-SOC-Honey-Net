@@ -110,7 +110,6 @@ Stop Time	2023-07-30 03:22:15
 | SecurityIncident (Sentinel Incidents)         | 0
 | NSG Inbound Malicious Flows Allowed | 0
 
-
 <br />
 
 ## Utilizing NIST 800.61r2 Computer Incident Handling Guide
@@ -149,7 +148,6 @@ Each organization will have policies related to an incident response that should
 - And a lessons-learned review of the incident was conducted.
 
 <br />
-
 
 ## Conclusion
 
